@@ -1,7 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Lucid.Svg
+import Lucid (renderBS)
 import Control.Monad
+
+import qualified Data.ByteString.Lazy as BS
+import System.Environment (getArgs)
 
 svg :: Svg () -> Svg ()
 svg content = do
@@ -16,5 +20,13 @@ contents = do
 
 
 main :: IO ()
+main' = do
+  print $ svg contents
+
+bigContents n = svg (replicateM_ n contents)
 main = do
-  print $ svg (replicateM_ 1000 contents )
+  args <- getArgs
+  case args of 
+    [n] ->  do
+              let bs = renderBS (bigContents (read n))
+              BS.writeFile "bench.svg" bs
