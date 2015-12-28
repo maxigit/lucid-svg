@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Lucid.Svg
+import Control.Monad
 
 svg :: Svg () -> Svg ()
 svg content = do
@@ -16,4 +17,4 @@ contents = do
 
 main :: IO ()
 main = do
-  print $ svg contents
+  print $ svg (replicateM_ 1000 contents )
