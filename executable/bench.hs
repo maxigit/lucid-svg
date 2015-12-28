@@ -5,6 +5,7 @@ import Lucid (renderBS)
 import Control.Monad
 
 import qualified Data.ByteString.Lazy as BS
+import qualified Data.Text.Lazy.IO as LT
 import System.Environment (getArgs)
 
 svg :: Svg () -> Svg ()
@@ -29,4 +30,10 @@ main = do
   case args of 
     [n] ->  do
               let bs = renderBS (bigContents (read n))
-              BS.writeFile "bench.svg" bs
+              BS.writeFile "bench-bs.svg" bs
+    ["t", n] ->  do
+              let bs = renderText (bigContents (read n))
+              LT.writeFile "bench-text.svg" bs
+    [_, n] ->  do
+              let p = prettyText (bigContents (read n))
+              LT.writeFile "bench-pretty.svg" p
